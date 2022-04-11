@@ -15,6 +15,10 @@ function App() {
               />
             <button type="submit" className='input-button' title="Create task">Search</button>
         </form>
+
+        <div className="result-wrapper">
+          
+        </div>
       </div>
     </div>
   );
