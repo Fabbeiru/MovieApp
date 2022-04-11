@@ -15,12 +15,14 @@
 }
 
 .wrapper {
+  z-index: 0;
   width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   row-gap: 50px;
+  background-color: aliceblue;
 }
 
 header {
@@ -32,6 +34,7 @@ header {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #0077BE;
+  background-color: aquamarine;
 }
 header h1 {
   font-family: 'Englebert', sans-serif;
@@ -41,13 +44,15 @@ header h1 {
 }
 
 .input-form {
-  width: 90%;
+  width: 100%;
+  padding: 20px 0;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  background-color: papayawhip;
 }
 
 .input-form input {
-  width: 70%;
+  width: 60%;
   padding: 15px;
   border-radius: 15px;
   font-size: 20px;
@@ -78,6 +83,6 @@ header h1 {
 }
 @media (min-width: 1024px) {
   .wrapper {
-    width: 50%;
+    width: 60%;
   }
 }
