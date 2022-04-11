@@ -1,12 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Englebert&family=Quicksand&display=swap');
+
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .App {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.wrapper {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 50px;
+}
+
+header {
+  height: 100%;
+  width: 100%;
+  padding: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #0077BE;
+}
+header h1 {
+  font-family: 'Englebert', sans-serif;
+}
+.logo {
+  width: 50px;
+}
+
+.input-form {
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.input-form input {
+  width: 70%;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 20px;
+}
+
+.input-form button {
+  width: auto;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 20px;
+  background-color: rgba(11,146,175,1);
+}
+
+.input-form button:hover {
+  transition: 0.2s all;
+  background-color: rgb(9, 110, 133);
+}
+
+.input-form button:active {
+  transform: scale(0.9);
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    width: 70%;
+  }
+}
+@media (min-width: 1024px) {
+  .wrapper {
+    width: 50%;
+  }
 }
