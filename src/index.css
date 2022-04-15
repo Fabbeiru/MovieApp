@@ -16,7 +16,7 @@
 
 .wrapper {
   z-index: 0;
-  width: 80%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,12 +43,19 @@ header h1 {
   width: 50px;
 }
 
+
+.input-form-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 25px;
+}
+
 .input-form {
   width: 100%;
   padding: 20px 0;
   display: flex;
   justify-content: space-between;
-  background-color: papayawhip;
 }
 
 .input-form input {
@@ -95,4 +102,90 @@ header h1 {
   .wrapper {
     width: 60%;
   }
+}
+
+
+.search-by-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.search-by-wrapper h3 {
+  word-spacing: 50px;
+}
+.search-by-wrapper button {
+  position: absolute;
+  display: block;
+  width: 25px;
+  height: 25px;
+  top: -25%;
+  border-radius: 50%;
+}
+.search-by-wrapper span {
+  position: relative;
+  display: block;
+  text-align: center;
+  width: 60px;
+  height: 16px;
+  border-radius: 8px;
+  padding: 0;
+  margin: 10px auto;
+  cursor: pointer;
+  background-color: #ffeba7;
+}
+
+
+.scene {
+  width: 100%;
+  height: 150px;
+  perspective: 750px;
+  margin-bottom: 15px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  position: relative;
+}
+
+.flip {
+  transform: rotateY(180deg);
+}
+
+.flip-button {
+  background-color: aqua;
+  transition: all 0.5s ease;
+}
+
+.flip2 {
+  transform: translateX(44px) rotate(-270deg);
+}
+
+.card__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card__face--front {
+  background: red;
+}
+
+.card__face--back {
+  background: blue;
+  transform: rotateY(180deg);
 }

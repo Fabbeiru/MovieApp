@@ -9,6 +9,11 @@ function App() {
 
   const [query, setQuery] = useState<string>("");
   const [userInput, setUserInput] = useState<string>("");
+  const [prueba, setPrueba] = useState<boolean>(false);
+
+  const handleClick = () => {
+      setPrueba(!prueba);
+  }
 
   const handleSubmit = (e: FormElement) => {
     e.preventDefault(); // Avoid default behaviour of a form -> reload page
@@ -23,7 +28,12 @@ function App() {
 
   useEffect(() => {
     const getMovies = async () => {
-      const response = await fetch("http://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
+      var response: Response;
+      if (!prueba) {
+        response = await fetch("http://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
+      } else {
+        response = await fetch("http://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
+      }
       const data = await response.json();
       console.log(data);
     }
@@ -40,14 +50,34 @@ function App() {
           <img className='logo' src={ logo } alt="Fabbeiru's logo" />
         </header>
 
-        <form className='input-form' onSubmit={handleSubmit}>
-            <input type="text" placeholder='Search a movie by title' autoFocus
-              value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
-            <button type="submit" className='input-button' title="Create task">Search</button>
-        </form>
+        <div className="input-form-wrapper">
+          <div className="search-by-wrapper">
+            <h3>Title Id</h3>
+            <span>
+              <button className={ "" + (prueba ? "flip-button flip2" : "flip-button") } onClick={handleClick}>↖</button>
+            </span>
+          </div>
 
-        <div className="result-wrapper">
-          
+          <div className="scene">
+              <div className={ "" + (prueba ? "card flip" : "card") }>
+                  <div className="card__face card__face--front">
+                    <h2>Search by title</h2>
+                    <form className='input-form' onSubmit={handleSubmit}>
+                      <input type="text" placeholder='Search a movie by title' autoFocus
+                        value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
+                      <button type="submit" className='input-button' title="Create task">Search</button>
+                    </form>
+                  </div>
+                  <div className="card__face card__face--back">
+                    <h2>Search by id</h2>
+                    <form className='input-form' onSubmit={handleSubmit}>
+                      <input type="text" placeholder='Search a movie by Id (e.g. tt0121766)' autoFocus
+                        value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
+                      <button type="submit" className='input-button' title="Create task">Search</button>
+                    </form>
+                  </div>
+              </div>
+          </div>
         </div>
       </div>
     </div>
