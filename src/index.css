@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Englebert&family=Quicksand:wght@300;700&display=swap');
 
+:root {
+  --bg: powderblue;
+  --blue: #0077BE;
+  --white: #fff;
+  --black: #000;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,6 +19,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  background-color: #f7f7f7;
 }
 
 .wrapper {
@@ -32,12 +40,50 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: powderblue;
+  background-color: var(--bg);
 }
 .logo {
   width: 50px;
 }
 
+.search-by-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.search-by-wrapper h3 {
+  word-spacing: 50px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.search-by-wrapper span {
+  position: relative;
+  display: block;
+  text-align: center;
+  width: 60px;
+  height: 15px;
+  border-radius: 8px;
+  margin: 20px auto;
+  background-color: var(--blue);
+}
+.search-by-button{
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: -50%;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--white);
+  background-color: var(--black);
+  transition: all 0.5s ease;
+}
+.flip-button {
+  transform: translateX(44px) rotate(-270deg);
+}
 
 .input-form-wrapper {
   width: 95%;
@@ -45,7 +91,6 @@ header {
   flex-direction: column;
   row-gap: 25px;
 }
-
 .input-form {
   width: 100%;
   height: 50%;
@@ -54,7 +99,6 @@ header {
   justify-content: space-evenly;
   flex-direction: column;
 }
-
 .input-form input {
   width: 95%;
   padding: 15px;
@@ -62,24 +106,59 @@ header {
   border: none;
   font-size: 20px;
 }
-
 .input-form button {
   width: 30%;
   padding: 10px;
   border-radius: 15px;
   border: none;
   font-size: 20px;
-  color: white;
-  background-color: black;
+  color: var(--white);
+  background-color: var(--black);
 }
-
 .input-form button:hover {
   transition: 0.2s all;
-  background-color: #0077BE;
+  background-color: var(--blue);
 }
-
 .input-form button:active {
   transform: scale(0.9);
+}
+
+.card-wrapper {
+  width: 100%;
+  height: 300px;
+  perspective: 750px;
+  margin-bottom: 15px;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  position: relative;
+}
+.flip-card {
+  transform: rotateY(180deg);
+}
+.card-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 5%;
+  background-color: var(--bg);
+}
+.card-back {
+  transform: rotateY(180deg);
 }
 
 .result-wrapper {
@@ -101,89 +180,4 @@ header {
   .wrapper {
     width: 60%;
   }
-}
-
-
-.search-by-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-.search-by-wrapper h3 {
-  word-spacing: 50px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-.search-by-wrapper span {
-  position: relative;
-  display: block;
-  text-align: center;
-  width: 60px;
-  height: 15px;
-  border-radius: 8px;
-  margin: 20px auto;
-  background-color: #0077BE;
-}
-
-
-.scene {
-  width: 100%;
-  height: 300px;
-  perspective: 750px;
-  margin-bottom: 15px;
-}
-
-.card {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  transition: transform 1s;
-  transform-style: preserve-3d;
-  cursor: pointer;
-  position: relative;
-}
-
-.flip {
-  transform: rotateY(180deg);
-}
-
-.flip-button {
-  position: absolute;
-  display: block;
-  width: 30px;
-  height: 30px;
-  top: -50%;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  background-color: black;
-  color: #fff;
-  transition: all 0.5s ease;
-}
-
-.flip2 {
-  transform: translateX(44px) rotate(-270deg);
-}
-
-.card__face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  flex-direction: column;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  border-radius: 5%;
-  background-color: powderblue;
-}
-
-.card__face--back {
-  transform: rotateY(180deg);
 }

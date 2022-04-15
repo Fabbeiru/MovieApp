@@ -54,26 +54,26 @@ function App() {
           <div className="search-by-wrapper">
             <h3>Title Id</h3>
             <span>
-              <button className={ "" + (prueba ? "flip-button flip2" : "flip-button") } onClick={handleClick}>↖&#xFE0E;</button>
+              <button className={ "" + (prueba ? "search-by-button flip-button" : "search-by-button") } onClick={handleClick}>↖&#xFE0E;</button>
             </span>
           </div>
 
-          <div className="scene">
-              <div className={ "" + (prueba ? "card flip" : "card") }>
-                  <div className="card__face card__face--front">
+          <div className="card-wrapper">
+              <div className={ "" + (prueba ? "card flip-card" : "card") }>
+                  <div className="card-content card-front">
                     <h2>Search by title</h2>
                     <form className='input-form' onSubmit={handleSubmit}>
                       <input type="text" placeholder='Search a movie by title' autoFocus
                         value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
-                      <button type="submit" className='input-button' title="Create task">Search</button>
+                      <button type="submit" className='input-button' title="Search by title">Search</button>
                     </form>
                   </div>
-                  <div className="card__face card__face--back">
+                  <div className="card-content card-back">
                     <h2>Search by id</h2>
                     <form className='input-form' onSubmit={handleSubmit}>
                       <input type="text" placeholder='Search a movie by Id (e.g. tt0121766)' 
                         value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
-                      <button type="submit" className='input-button' title="Create task">Search</button>
+                      <button type="submit" className='input-button' title="Search by id">Search</button>
                     </form>
                   </div>
               </div>
