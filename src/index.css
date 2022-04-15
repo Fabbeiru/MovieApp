@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Englebert&family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Englebert&family=Quicksand:wght@300;700&display=swap');
 
 * {
   margin: 0;
@@ -16,28 +16,23 @@
 
 .wrapper {
   z-index: 0;
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   row-gap: 50px;
-  background-color: aliceblue;
 }
 
 header {
   height: 100%;
   width: 100%;
-  padding: 25px;
+  padding: 35px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #0077BE;
-  background-color: aquamarine;
-}
-header h1 {
-  font-family: 'Englebert', sans-serif;
+  background-color: powderblue;
 }
 .logo {
   width: 50px;
@@ -45,7 +40,7 @@ header h1 {
 
 
 .input-form-wrapper {
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: column;
   row-gap: 25px;
@@ -61,9 +56,10 @@ header h1 {
 }
 
 .input-form input {
-  width: 100%;
+  width: 95%;
   padding: 15px;
   border-radius: 15px;
+  border: none;
   font-size: 20px;
 }
 
@@ -71,18 +67,19 @@ header h1 {
   width: 30%;
   padding: 10px;
   border-radius: 15px;
+  border: none;
   font-size: 20px;
-  background-color: rgba(11,146,175,1);
+  color: white;
+  background-color: black;
 }
 
 .input-form button:hover {
   transition: 0.2s all;
-  background-color: rgb(9, 110, 133);
+  background-color: #0077BE;
 }
 
 .input-form button:active {
   transform: scale(0.9);
-  color: white;
 }
 
 .result-wrapper {
@@ -115,26 +112,18 @@ header h1 {
 }
 .search-by-wrapper h3 {
   word-spacing: 50px;
-}
-.search-by-wrapper button {
-  position: absolute;
-  display: block;
-  width: 25px;
-  height: 25px;
-  top: -25%;
-  border-radius: 50%;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 .search-by-wrapper span {
   position: relative;
   display: block;
   text-align: center;
   width: 60px;
-  height: 16px;
+  height: 15px;
   border-radius: 8px;
-  padding: 0;
-  margin: 10px auto;
-  cursor: pointer;
-  background-color: #ffeba7;
+  margin: 20px auto;
+  background-color: #0077BE;
 }
 
 
@@ -163,7 +152,17 @@ header h1 {
 }
 
 .flip-button {
-  background-color: aqua;
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: -50%;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: black;
+  color: #fff;
   transition: all 0.5s ease;
 }
 
@@ -181,13 +180,10 @@ header h1 {
   flex-direction: column;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-}
-
-.card__face--front {
-  background: red;
+  border-radius: 5%;
+  background-color: powderblue;
 }
 
 .card__face--back {
-  background: blue;
   transform: rotateY(180deg);
 }

@@ -12,7 +12,7 @@ function App() {
   const [prueba, setPrueba] = useState<boolean>(false);
 
   const handleClick = () => {
-      setPrueba(!prueba);
+    setPrueba(!prueba);
   }
 
   const handleSubmit = (e: FormElement) => {
@@ -54,7 +54,7 @@ function App() {
           <div className="search-by-wrapper">
             <h3>Title Id</h3>
             <span>
-              <button className={ "" + (prueba ? "flip-button flip2" : "flip-button") } onClick={handleClick}>↖</button>
+              <button className={ "" + (prueba ? "flip-button flip2" : "flip-button") } onClick={handleClick}>↖&#xFE0E;</button>
             </span>
           </div>
 
@@ -71,7 +71,7 @@ function App() {
                   <div className="card__face card__face--back">
                     <h2>Search by id</h2>
                     <form className='input-form' onSubmit={handleSubmit}>
-                      <input type="text" placeholder='Search a movie by Id (e.g. tt0121766)' autoFocus
+                      <input type="text" placeholder='Search a movie by Id (e.g. tt0121766)' 
                         value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
                       <button type="submit" className='input-button' title="Create task">Search</button>
                     </form>
