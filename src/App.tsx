@@ -44,12 +44,14 @@ function App() {
 
   return (
     <div className="App">
-      <div className="wrapper">
+      <div className="header-wrapper">
         <header>
           <h1>Movie app</h1>
           <img className='logo' src={ logo } alt="Fabbeiru's logo" />
         </header>
+      </div>
 
+      <div className="wrapper">
         <div className="input-form-wrapper">
           <div className="search-by-wrapper">
             <h3>Title Id</h3>
