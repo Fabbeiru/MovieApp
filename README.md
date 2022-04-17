@@ -1,6 +1,6 @@
 # Movie app
 
-Project to practise fetching data from API and displaying it. Search a movie by its title or imdbID and get some information about it. Check it out <a href"https://fabbeiru.github.io/MovieApp/">here</a>.
+Project to practise fetching data from API and displaying it. Search a movie by its title or imdbID and get some information about it. Check it out [here](https://fabbeiru.github.io/MovieApp/).
 
 ## Important!
 
