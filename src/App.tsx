@@ -14,6 +14,7 @@ function App() {
   const [apiResponse, setApiResponse] = useState<boolean>(false);
   const [firstTime, setFirstTime] = useState<boolean>(true);
   const [data, setData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleClick = () => {
     setSearchById(!searchById);
@@ -31,6 +32,8 @@ function App() {
   }
 
   const getMovies = async () => {
+    setApiResponse(false);
+    setLoading(true);
     var response: Response;
     try {
       /* if (searchById) {
@@ -50,6 +53,7 @@ function App() {
       console.log(error);
       alert("Something went wrong while connecting to the API");
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -99,6 +103,14 @@ function App() {
         </div>
 
         <div className="results-wrapper">
+          {loading && 
+          <div className="movie loading">
+            <div className="poster"></div>
+            <div className="movie-details">
+              <h2></h2>
+              <p></p>
+            </div>
+          </div>}
           {apiResponse && <Movie title={data.Title} year={data.Year} rating={data.Ratings[1].Value} plot={data.Plot} poster={data.Poster}></Movie>}
         </div>
       </div>
