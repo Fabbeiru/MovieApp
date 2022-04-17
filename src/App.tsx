@@ -38,7 +38,7 @@ function App() {
       } else {
         response = await fetch("http://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
       } */
-      response = await fetch("http://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
+      response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
       const data = await response.json();
       setData(data);
       setApiResponse(data.Response);
