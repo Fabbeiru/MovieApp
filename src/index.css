@@ -207,6 +207,12 @@ header {
   color: var(--blue);
   font-weight: bold;
 }
+.results {
+  width: 95%;
+}
+.results > .movie-details{
+  text-align: center;
+}
 
 .loading .poster{
   background: #eee;
@@ -242,13 +248,24 @@ header {
   }
 }
 
+@media (max-width: 767px) and (orientation: landscape) {
+  .results {
+    width: 45%;
+  }
+}
 @media (min-width: 768px) {
   .wrapper, header{
     width: 70%;
+  }
+  .results {
+    width: 45%;
   }
 }
 @media (min-width: 1024px) {
   .wrapper, header{
     width: 60%;
+  }
+  .results {
+    width: 30%;
   }
 }

@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import logo from './blackLogo.png';
-import Movie from './Movie';
 
 type FormElement = React.FormEvent<HTMLFormElement>;
 
 const apiKey : string = "9fdb091c";
+
+export interface Movie {
+  title: string,
+  year: string,
+  rating: string,
+  plot: string,
+  poster: string
+}
 
 function App() {
 
   const [query, setQuery] = useState<string>("");
   const [userInput, setUserInput] = useState<string>("");
   const [searchById, setSearchById] = useState<boolean>(false);
-  const [apiResponse, setApiResponse] = useState<boolean>(false);
+  const [apiResponseById, setApiResponseById] = useState<boolean>(false);
+  const [apiResponseByTitle, setApiResponseByTitle] = useState<boolean>(false);
   const [firstTime, setFirstTime] = useState<boolean>(true);
   const [data, setData] = useState<any>();
+  const [movie, setMovie] = useState<Movie>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -23,7 +32,7 @@ function App() {
   const handleSubmit = (e: FormElement) => {
     e.preventDefault(); // Avoid default behaviour of a form -> reload page
     if (userInput !== '' && userInput !== query) {
-      setQuery(userInput);
+      setQuery(userInput.trim());
       setUserInput('');
       console.log(userInput);
     } else {
@@ -32,19 +41,30 @@ function App() {
   }
 
   const getMovies = async () => {
-    setApiResponse(false);
+    setApiResponseById(false);
+    setApiResponseByTitle(false);
     setLoading(true);
     var response: Response;
+    var data: any;
     try {
-      /* if (searchById) {
-        response = await fetch("http://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
+      if (searchById) {
+        response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
+        data = await response.json();
+        setData(data);
+        setApiResponseById(data.Response);
+        setMovie({
+          title: data.Title,
+          year: data.Year,
+          rating: data.Ratings[0].Value,
+          plot: data.Plot,
+          poster: data.Poster
+        })
       } else {
-        response = await fetch("http://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
-      } */
-      response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
-      const data = await response.json();
-      setData(data);
-      setApiResponse(data.Response);
+        response = await fetch("https://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
+        data = await response.json();
+        setData(data);
+        setApiResponseByTitle(data.Response);
+      }
       if (data.Response === "False") {
         alert("Ooops! " + data.Error);
       }
@@ -107,11 +127,29 @@ function App() {
           <div className="movie loading">
             <div className="poster"></div>
             <div className="movie-details">
-              <h2></h2>
+              <h2> </h2>
               <p></p>
             </div>
           </div>}
-          {apiResponse && <Movie title={data.Title} year={data.Year} rating={data.Ratings[1].Value} plot={data.Plot} poster={data.Poster}></Movie>}
+          {apiResponseByTitle && data.Search.map((movieRes: any) => (
+            <div className="results movie">
+            <img className="poster" src={movieRes.Poster} alt={movieRes.Title + " poster"} />
+              <div className="movie-details">
+                <h2>{movieRes.Title}</h2>
+                <p><span>Type:</span> {movieRes.Type}</p>
+                <p><span>imdbID:</span> {movieRes.imdbID}</p>
+              </div>
+            </div>
+          ))}
+          {apiResponseById && <div className="movie">
+            <img className="poster" src={movie?.poster} alt={movie?.title + " poster"} />
+            <div className="movie-details">
+                <h2>{movie?.title}</h2>
+                <p><span>Year:</span> {movie?.year}</p>
+                <p><span>Rating:</span> {movie?.rating}</p>
+                <p><span>Plot:</span><br/>{movie?.plot}</p>
+            </div>
+          </div>}
         </div>
       </div>
     </div>
