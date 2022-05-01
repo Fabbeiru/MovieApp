@@ -6,11 +6,10 @@ type FormElement = React.FormEvent<HTMLFormElement>;
 const apiKey : string = "9fdb091c";
 
 export interface Movie {
-  title: string,
-  year: string,
-  rating: string,
-  plot: string,
-  poster: string
+  Title: string,
+  Year: string,
+  Plot: string,
+  Poster: string
 }
 
 function App() {
@@ -52,13 +51,7 @@ function App() {
         data = await response.json();
         setData(data);
         setApiResponseById(data.Response);
-        setMovie({
-          title: data.Title,
-          year: data.Year,
-          rating: data.Ratings[0].Value,
-          plot: data.Plot,
-          poster: data.Poster
-        })
+        setMovie(data)
       } else {
         response = await fetch("https://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
         data = await response.json();
@@ -131,8 +124,8 @@ function App() {
               <p></p>
             </div>
           </div>}
-          {apiResponseByTitle && data.Search.map((movieRes: any) => (
-            <div className="results movie">
+          {apiResponseByTitle && data.Search.map((movieRes: any, i: number) => (
+            <div className="results movie" key={i}>
             <img className="poster" src={movieRes.Poster} alt={movieRes.Title + " poster"} />
               <div className="movie-details">
                 <h2>{movieRes.Title}</h2>
@@ -142,12 +135,12 @@ function App() {
             </div>
           ))}
           {apiResponseById && <div className="movie">
-            <img className="poster" src={movie?.poster} alt={movie?.title + " poster"} />
+            <img className="poster" src={movie?.Poster} alt={movie?.Title + " poster"} />
             <div className="movie-details">
-                <h2>{movie?.title}</h2>
-                <p><span>Year:</span> {movie?.year}</p>
-                <p><span>Rating:</span> {movie?.rating}</p>
-                <p><span>Plot:</span><br/>{movie?.plot}</p>
+                <h2>{movie?.Title}</h2>
+                <p><span>Year:</span> {movie?.Year}</p>
+                <p><span>Rating:</span> </p>
+                <p><span>Plot:</span><br/>{movie?.Plot}</p>
             </div>
           </div>}
         </div>
