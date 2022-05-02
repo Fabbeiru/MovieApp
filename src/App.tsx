@@ -49,19 +49,23 @@ function App() {
       if (searchById) {
         response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
         data = await response.json();
+        console.log(data);
         setData(data);
         setApiResponseById(data.Response);
-        setMovie(data)
+        setMovie(data);
+        console.log(movie);
       } else {
         response = await fetch("https://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
         data = await response.json();
+        console.log(data);
         setData(data);
+        setMovie(data);
+        console.log(movie);
         setApiResponseByTitle(data.Response);
       }
       if (data.Response === "False") {
         alert("Ooops! " + data.Error);
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
       alert("Something went wrong while connecting to the API");
