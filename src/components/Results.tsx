@@ -1,6 +1,6 @@
 import Loading from './Loading';
 import Movies from './Movies';
-import { useMovies } from './useMovies';
+import { useMovies } from '../hooks/useMovies';
 
 interface ResultsProps {
     query: string;

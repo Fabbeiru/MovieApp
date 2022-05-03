@@ -1,4 +1,4 @@
-import logo from './blackLogo.png';
+import logo from '../styles/blackLogo.png';
 
 function Header(): JSX.Element {
     return (
