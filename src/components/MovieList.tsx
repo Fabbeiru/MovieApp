@@ -1,4 +1,4 @@
-import { MovieByTitle } from "./useMovies";
+import { MovieByTitle } from "../hooks/useMovies";
 
 function MovieList(data: any) : JSX.Element {
     return (

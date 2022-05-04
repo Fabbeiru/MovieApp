@@ -1,4 +1,4 @@
-import { MovieById } from "./useMovies";
+import { MovieById } from "../hooks/useMovies";
 
 function MovieDetails(movieById: MovieById) : JSX.Element {
     return (
