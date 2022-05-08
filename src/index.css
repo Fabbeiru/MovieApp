@@ -182,7 +182,6 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   row-gap: 25px;
   padding: 25px;
   background-color: var(--bg);
@@ -194,23 +193,25 @@ header {
   border: 0.5px solid var(--black);
   border-radius: 15px;
 }
-.movie-details {
+.movie-data {
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   row-gap: 10px;
 }
-.movie-details h2 {
+.movie-data h2 {
   text-align: center;
   margin-bottom: 15px;
 }
-.movie-details span {
+.movie-data span {
   color: var(--blue);
   font-weight: bold;
 }
 .results {
   width: 95%;
 }
-.results > .movie-details{
+.results > .movie-data{
   text-align: center;
 }
 

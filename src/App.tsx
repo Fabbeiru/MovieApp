@@ -125,7 +125,7 @@ function App() {
           {loading && 
           <div className="movie loading">
             <div className="poster"></div>
-            <div className="movie-details">
+            <div className="movie-data">
               <h2> </h2>
               <p></p>
             </div>
@@ -133,16 +133,18 @@ function App() {
           {apiResponseByTitle && data.Search.map((movieRes: any, i: number) => (
             <div className="results movie" key={i}>
             <img className="poster" src={movieRes.Poster} alt={movieRes.Title + " poster"} />
-              <div className="movie-details">
+              <div className="movie-data">
                 <h2>{movieRes.Title}</h2>
-                <p><span>Type:</span> {movieRes.Type}</p>
-                <p><span>imdbID:</span> {movieRes.imdbID}</p>
+                <div className="movie-details">
+                  <p><span>Type:</span> {movieRes.Type}</p>
+                  <p><span>imdbID:</span> {movieRes.imdbID}</p>
+                </div>
               </div>
             </div>
           ))}
           {apiResponseById && <div className="movie">
             <img className="poster" src={movie?.Poster} alt={movie?.Title + " poster"} />
-            <div className="movie-details">
+            <div className="movie-data">
                 <h2>{movie?.Title}</h2>
                 <p><span>Year:</span> {movie?.Year}</p>
                 <p><span>Rating:</span> {movie?.imdbRating}</p>
