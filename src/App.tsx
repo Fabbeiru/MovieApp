@@ -9,6 +9,8 @@ export interface Movie {
   Title: string,
   Year: string,
   Plot: string,
+  imdbRating: string,
+  Runtime: string,
   Poster: string
 }
 
@@ -143,7 +145,8 @@ function App() {
             <div className="movie-details">
                 <h2>{movie?.Title}</h2>
                 <p><span>Year:</span> {movie?.Year}</p>
-                <p><span>Rating:</span> </p>
+                <p><span>Rating:</span> {movie?.imdbRating}</p>
+                <p><span>Runtime:</span> {movie?.Runtime}</p>
                 <p><span>Plot:</span><br/>{movie?.Plot}</p>
             </div>
           </div>}
