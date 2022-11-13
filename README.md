@@ -2,6 +2,8 @@
 
 Project to practise fetching data from API and displaying it. Search a movie by its title or imdbID and get some information about it. Check it out [here](https://fabbeiru.github.io/MovieApp/).
 
+<p align="center"><img src="/MovieApp.png" alt="Movie App"></img></p>
+
 ## Improvements
 
 - Handle more error cases found.
