@@ -105,7 +105,8 @@ function App() {
       setApiResponseByTitle(false);
       setErrorMessage(null);
       if (!apiKey) {
-        setErrorMessage("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
+        console.error("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
+        setErrorMessage("Oops! Something went wrong. Please try again later.");
         return;
       }
       setLoading(true);
@@ -136,7 +137,8 @@ function App() {
       setApiResponseById(false);
       setErrorMessage(null);
       if (!apiKey) {
-        setErrorMessage("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
+        console.error("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
+        setErrorMessage("Oops! Something went wrong. Please try again later.");
         return;
       }
       setLoadingDetail(true);
