@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import logo from './blackLogo.png';
+import SearchForm from './components/SearchForm';
+import MovieCard from './components/MovieCard';
+import MovieDetail from './components/MovieDetail';
+import Loader from './components/Loader';
+import ErrorMessage from './components/ErrorMessage';
+import Pagination from './components/Pagination';
+import { Movie, SearchApiResult, MovieApiResult } from './types';
 
 type FormElement = React.FormEvent<HTMLFormElement>;
 
-const apiKey : string = "9fdb091c";
-
-export interface Movie {
-  Title: string,
-  Year: string,
-  Plot: string,
-  imdbRating: string,
-  Runtime: string,
-  Poster: string
-}
+const apiKey: string = process.env.REACT_APP_OMDB_API_KEY || "";
 
 function App() {
 
@@ -22,136 +20,115 @@ function App() {
   const [apiResponseById, setApiResponseById] = useState<boolean>(false);
   const [apiResponseByTitle, setApiResponseByTitle] = useState<boolean>(false);
   const [firstTime, setFirstTime] = useState<boolean>(true);
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<SearchApiResult>();
   const [movie, setMovie] = useState<Movie>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
 
-  const handleClick = () => {
+  const handleToggleSearchType = () => {
     setSearchById(!searchById);
   }
 
   const handleSubmit = (e: FormElement) => {
     e.preventDefault(); // Avoid default behaviour of a form -> reload page
     if (userInput !== '' && userInput !== query) {
+      setErrorMessage(null);
+      setPage(1);
       setQuery(userInput.trim());
       setUserInput('');
-      console.log(userInput);
     } else {
-      alert("Please enter a valid movie title, id or try with a different one.");
+      setErrorMessage("Please enter a valid movie title, id or try with a different one.");
     }
   }
 
-  const getMovies = async () => {
+  const getMovies = async (signal: AbortSignal) => {
     setApiResponseById(false);
     setApiResponseByTitle(false);
+    setErrorMessage(null);
+    if (!apiKey) {
+      setErrorMessage("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
+      return;
+    }
     setLoading(true);
-    var response: Response;
-    var data: any;
     try {
       if (searchById) {
-        response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey);
-        data = await response.json();
-        console.log(data);
-        setData(data);
-        setApiResponseById(data.Response);
-        setMovie(data);
-        console.log(movie);
+        const response = await fetch("https://www.omdbapi.com/?i=" + query + "&apikey=" + apiKey, { signal });
+        const result: MovieApiResult = await response.json();
+        setApiResponseById(result.Response === "True");
+        if (result.Response === "True") {
+          setMovie(result);
+        } else {
+          setErrorMessage("Ooops! " + result.Error);
+        }
       } else {
-        response = await fetch("https://www.omdbapi.com/?s=" + query + "&apikey=" + apiKey);
-        data = await response.json();
-        console.log(data);
-        setData(data);
-        setMovie(data);
-        console.log(movie);
-        setApiResponseByTitle(data.Response);
-      }
-      if (data.Response === "False") {
-        alert("Ooops! " + data.Error);
+        const response = await fetch("https://www.omdbapi.com/?s=" + query + "&page=" + page + "&apikey=" + apiKey, { signal });
+        const result: SearchApiResult = await response.json();
+        setData(result);
+        setApiResponseByTitle(result.Response === "True");
+        if (result.Response === "False") {
+          setErrorMessage("Ooops! " + result.Error);
+        }
       }
     } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
       console.log(error);
-      alert("Something went wrong while connecting to the API");
+      setErrorMessage("Something went wrong while connecting to the API");
     }
     setLoading(false);
   }
 
   useEffect(() => {
+    if (firstTime) {
+      setFirstTime(false);
+      return;
+    }
+    const controller = new AbortController();
+    getMovies(controller.signal);
+    return () => controller.abort();
 
-    !firstTime ? getMovies() : setFirstTime(false);
-
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div className="App">
       <div className="header-wrapper">
         <header>
           <h1>Movie app</h1>
-          <img className='logo' src={ logo } alt="Fabbeiru's logo" />
+          <img className='logo' src={logo} alt="Fabbeiru's logo" />
         </header>
       </div>
 
       <div className="wrapper">
-        <div className="input-form-wrapper">
-          <div className="search-by-wrapper">
-            <h3>Title Id</h3>
-            <span>
-              <button className={ "" + (searchById ? "search-by-button flip-button" : "search-by-button") } onClick={handleClick}>↖&#xFE0E;</button>
-            </span>
-          </div>
+        <SearchForm
+          searchById={searchById}
+          userInput={userInput}
+          onInputChange={setUserInput}
+          onToggleSearchType={handleToggleSearchType}
+          onSubmit={handleSubmit}
+        />
 
-          <div className="card-wrapper">
-              <div className={ "" + (searchById ? "card flip-card" : "card") }>
-                  <div className="card-content card-front">
-                    <h2>Search by title</h2>
-                    <form className='input-form' onSubmit={handleSubmit}>
-                      <input type="text" placeholder='Search a movie by title' autoFocus
-                        value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
-                      <button type="submit" className='input-button' title="Search by title">Search</button>
-                    </form>
-                  </div>
-                  <div className="card-content card-back">
-                    <h2>Search by id</h2>
-                    <form className='input-form' onSubmit={handleSubmit}>
-                      <input type="text" placeholder='Search a movie by imdbID (e.g. tt0121766)' 
-                        value={userInput} onChange={(e) => setUserInput(e.target.value)}/>
-                      <button type="submit" className='input-button' title="Search by id">Search</button>
-                    </form>
-                  </div>
-              </div>
-          </div>
-        </div>
+        {errorMessage && <ErrorMessage message={errorMessage} />}
 
         <div className="results-wrapper">
-          {loading && 
-          <div className="movie loading">
-            <div className="poster"></div>
-            <div className="movie-data">
-              <h2> </h2>
-              <p></p>
-            </div>
-          </div>}
-          {apiResponseByTitle && data.Search.map((movieRes: any, i: number) => (
-            <div className="results movie" key={i}>
-            <img className="poster" src={movieRes.Poster} alt={movieRes.Title + " poster"} />
-              <div className="movie-data">
-                <h2>{movieRes.Title}</h2>
-                <div className="movie-details">
-                  <p><span>Type:</span> {movieRes.Type}</p>
-                  <p><span>imdbID:</span> {movieRes.imdbID}</p>
-                </div>
-              </div>
-            </div>
+          {loading && <Loader />}
+          {apiResponseByTitle && data?.Response === "True" && data.Search.map((movieRes) => (
+            <MovieCard key={movieRes.imdbID} movie={movieRes} />
           ))}
-          {apiResponseById && <div className="movie">
-            <img className="poster" src={movie?.Poster} alt={movie?.Title + " poster"} />
-            <div className="movie-data">
-                <h2>{movie?.Title}</h2>
-                <p><span>Year:</span> {movie?.Year}</p>
-                <p><span>Rating:</span> {movie?.imdbRating}</p>
-                <p><span>Runtime:</span> {movie?.Runtime}</p>
-                <p><span>Plot:</span><br/>{movie?.Plot}</p>
-            </div>
-          </div>}
+        </div>
+
+        {apiResponseByTitle && data?.Response === "True" && Number(data.totalResults) > 10 && (
+          <Pagination
+            page={page}
+            totalResults={Number(data.totalResults)}
+            onPrevious={() => setPage(page - 1)}
+            onNext={() => setPage(page + 1)}
+          />
+        )}
+
+        <div className="results-wrapper">
+          {apiResponseById && movie && <MovieDetail movie={movie} />}
         </div>
       </div>
     </div>
