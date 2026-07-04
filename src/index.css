@@ -23,6 +23,10 @@
   font-family: 'Quicksand', sans-serif;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -107,6 +111,39 @@ header {
     margin-left: 0;
   }
 }
+
+.navbar-search-fields {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo toggle"
+      "fields fields";
+    column-gap: 10px;
+    row-gap: 10px;
+  }
+  .logo-button {
+    grid-area: logo;
+  }
+  .navbar-search {
+    display: contents;
+  }
+  .search-type-toggle {
+    grid-area: toggle;
+  }
+  .navbar-search-fields {
+    grid-area: fields;
+  }
+}
+
 .search-type-toggle {
   display: flex;
   flex-shrink: 0;
@@ -150,6 +187,16 @@ header {
 }
 .navbar-search button[type="submit"]:hover {
   background-color: #2a2c36;
+}
+@media (max-width: 480px) {
+  .navbar-search button[type="submit"] {
+    font-size: 0;
+    padding: 10px 14px;
+  }
+  .navbar-search button[type="submit"]::before {
+    content: "🔍";
+    font-size: 16px;
+  }
 }
 .navbar-search .field-hint {
   position: absolute;

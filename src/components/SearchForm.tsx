@@ -25,17 +25,19 @@ function SearchForm({ searchById, userInput, onInputChange, onToggleSearchType, 
           <button type="button" className={!searchById ? "active" : ""} onClick={() => searchById && onToggleSearchType()}>Title</button>
           <button type="button" className={searchById ? "active" : ""} onClick={() => !searchById && onToggleSearchType()}>Id</button>
         </div>
-        <label className="sr-only" htmlFor="navbar-search-input">
-          {searchById ? ID_PLACEHOLDER : TITLE_PLACEHOLDER}
-        </label>
-        <input
-          id="navbar-search-input"
-          type="text"
-          placeholder={searchById ? ID_PLACEHOLDER : TITLE_PLACEHOLDER}
-          value={userInput}
-          onChange={(e) => onInputChange(e.target.value)}
-        />
-        <button type="submit">Search</button>
+        <div className="navbar-search-fields">
+          <label className="sr-only" htmlFor="navbar-search-input">
+            {searchById ? ID_PLACEHOLDER : TITLE_PLACEHOLDER}
+          </label>
+          <input
+            id="navbar-search-input"
+            type="text"
+            placeholder={searchById ? ID_PLACEHOLDER : TITLE_PLACEHOLDER}
+            value={userInput}
+            onChange={(e) => onInputChange(e.target.value)}
+          />
+          <button type="submit" aria-label="Search">Search</button>
+        </div>
         {isTitleTooShort && <p className="field-hint">Type at least {MIN_TITLE_LENGTH} characters.</p>}
       </form>
     );
