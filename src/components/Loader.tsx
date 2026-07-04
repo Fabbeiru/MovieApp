@@ -6,10 +6,10 @@ interface LoaderProps {
 function Loader({ count = 1, variant = 'card' }: LoaderProps) {
   if (variant === 'detail') {
     return (
-      <div className="movie detail loading">
+      <div className="movie detail loading" aria-hidden="true">
         <div className="poster shimmer"></div>
         <div className="movie-data">
-          <h2 className="shimmer"></h2>
+          <div className="shimmer skeleton-title"></div>
           <p className="shimmer meta-line-skeleton"></p>
           <div className="genre-pills">
             <span className="pill shimmer"></span>
@@ -27,10 +27,10 @@ function Loader({ count = 1, variant = 'card' }: LoaderProps) {
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <div className="movie loading" key={i}>
+        <div className="movie loading" key={i} aria-hidden="true">
           <div className="poster shimmer"></div>
           <div className="movie-data">
-            <h2 className="shimmer"></h2>
+            <div className="shimmer skeleton-title"></div>
             <div className="movie-details">
               <p className="shimmer"></p>
               <p className="shimmer"></p>

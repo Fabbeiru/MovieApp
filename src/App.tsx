@@ -35,7 +35,6 @@ function App() {
   const [view, setView] = useState<View>('results');
   const [apiResponseById, setApiResponseById] = useState<boolean>(false);
   const [apiResponseByTitle, setApiResponseByTitle] = useState<boolean>(false);
-  const [firstTime, setFirstTime] = useState<boolean>(true);
   const [data, setData] = useState<SearchApiResult>();
   const [movie, setMovie] = useState<Movie>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -99,10 +98,6 @@ function App() {
   }
 
   useEffect(() => {
-    if (firstTime) {
-      setFirstTime(false);
-      return;
-    }
     if (!query) return;
 
     const controller = new AbortController();

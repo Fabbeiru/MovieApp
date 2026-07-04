@@ -526,10 +526,11 @@ header {
 .loading .poster {
   border: none;
 }
-.loading h2 {
+.loading .skeleton-title {
   height: 22px;
   width: 70%;
   align-self: center;
+  margin-bottom: 15px;
 }
 .loading .movie-details p {
   height: 12px;
