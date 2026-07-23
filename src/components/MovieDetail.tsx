@@ -1,4 +1,5 @@
 import { Movie } from '../types';
+import Poster from './Poster';
 
 interface MovieDetailProps {
   movie: Movie;
@@ -15,7 +16,7 @@ function MovieDetail({ movie }: MovieDetailProps) {
 
   return (
     <div className="movie detail">
-      <img className="poster" src={movie.Poster} alt={movie.Title + " poster"} />
+      <Poster key={movie.imdbID} src={movie.Poster} alt={movie.Title + " poster"} />
 
       <div className="movie-data">
         <h2>{movie.Title}</h2>

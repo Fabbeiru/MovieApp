@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import logo from './blackLogo.png';
 import SearchForm from './components/SearchForm';
 import MovieCard from './components/MovieCard';
 import MovieDetail from './components/MovieDetail';
 import Loader from './components/Loader';
 import ErrorMessage from './components/ErrorMessage';
+import NoResults from './components/NoResults';
 import Pagination from './components/Pagination';
 import RecentSearches from './components/RecentSearches';
-import { Movie, SearchApiResult, MovieApiResult } from './types';
-import { MIN_TITLE_LENGTH } from './constants';
+import { SearchApiResult, MovieApiResult } from './types';
+import { MIN_TITLE_LENGTH, OMDB_API_KEY, EXAMPLE_SEARCHES } from './constants';
+import useOmdbFetch from './hooks/useOmdbFetch';
 
 type FormElement = React.FormEvent<HTMLFormElement>;
 type View = 'results' | 'detail';
 
-const apiKey: string = process.env.REACT_APP_OMDB_API_KEY || "";
 const RECENT_SEARCHES_KEY = "movieapp_recent_searches";
 const MAX_RECENT_SEARCHES = 5;
 
@@ -33,16 +34,27 @@ function App() {
   const [searchById, setSearchById] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<View>('results');
-  const [apiResponseById, setApiResponseById] = useState<boolean>(false);
-  const [apiResponseByTitle, setApiResponseByTitle] = useState<boolean>(false);
-  const [data, setData] = useState<SearchApiResult>();
-  const [movie, setMovie] = useState<Movie>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [page, setPage] = useState<number>(1);
   const [recentSearches, setRecentSearches] = useState<string[]>(loadRecentSearches);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const searchUrl = query
+    ? "https://www.omdbapi.com/?s=" + encodeURIComponent(query) + "&page=" + page + "&apikey=" + OMDB_API_KEY
+    : null;
+  const { data: searchData, loading, error: searchFetchError } = useOmdbFetch<SearchApiResult>(searchUrl);
+
+  const detailUrl = selectedId
+    ? "https://www.omdbapi.com/?i=" + encodeURIComponent(selectedId) + "&plot=full&apikey=" + OMDB_API_KEY
+    : null;
+  const { data: movieData, loading: loadingDetail, error: detailFetchError } = useOmdbFetch<MovieApiResult>(detailUrl);
+
+  const hasSearchResults = searchData?.Response === "True";
+  const noSearchResults = searchData?.Response === "False";
+  const movie = movieData?.Response === "True" ? movieData : undefined;
+  const noMovieResult = movieData?.Response === "False";
+
+  const resultsError = formError || searchFetchError;
 
   const handleToggleSearchType = () => {
     setSearchById(!searchById);
@@ -64,7 +76,7 @@ function App() {
     if (title.length < MIN_TITLE_LENGTH) {
       return;
     }
-    setErrorMessage(null);
+    setFormError(null);
     setSearchById(false);
     setUserInput(title);
     setView('results');
@@ -77,10 +89,10 @@ function App() {
   const handleSubmit = (e: FormElement) => {
     e.preventDefault(); // Avoid default behaviour of a form -> reload page
     if (userInput === '') {
-      setErrorMessage("Please enter a valid movie title, id or try with a different one.");
+      setFormError("Please enter a valid movie title, id or try with a different one.");
       return;
     }
-    setErrorMessage(null);
+    setFormError(null);
     if (searchById) {
       setView('detail');
       setHasSearched(true);
@@ -91,84 +103,28 @@ function App() {
   }
 
   const handleSelectMovie = (imdbID: string) => {
-    setErrorMessage(null);
+    setFormError(null);
     setView('detail');
     setHasSearched(true);
     setSelectedId(imdbID);
   }
 
-  useEffect(() => {
-    if (!query) return;
-
-    const controller = new AbortController();
-    (async () => {
-      setApiResponseByTitle(false);
-      setErrorMessage(null);
-      if (!apiKey) {
-        console.error("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
-        setErrorMessage("Oops! Something went wrong. Please try again later.");
-        return;
-      }
-      setLoading(true);
-      try {
-        const response = await fetch("https://www.omdbapi.com/?s=" + query + "&page=" + page + "&apikey=" + apiKey, { signal: controller.signal });
-        const result: SearchApiResult = await response.json();
-        setData(result);
-        setApiResponseByTitle(result.Response === "True");
-        if (result.Response === "False") {
-          setErrorMessage("Ooops! " + result.Error);
-        }
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        console.log(error);
-        setErrorMessage("Something went wrong while connecting to the API");
-      }
-      setLoading(false);
-    })();
-
-    return () => controller.abort();
-  }, [query, page]);
-
-  useEffect(() => {
-    if (!selectedId) return;
-
-    const controller = new AbortController();
-    (async () => {
-      setApiResponseById(false);
-      setErrorMessage(null);
-      if (!apiKey) {
-        console.error("Missing OMDB API key. Set REACT_APP_OMDB_API_KEY in your .env file.");
-        setErrorMessage("Oops! Something went wrong. Please try again later.");
-        return;
-      }
-      setLoadingDetail(true);
-      try {
-        const response = await fetch("https://www.omdbapi.com/?i=" + selectedId + "&apikey=" + apiKey, { signal: controller.signal });
-        const result: MovieApiResult = await response.json();
-        setApiResponseById(result.Response === "True");
-        if (result.Response === "True") {
-          setMovie(result);
-        } else {
-          setErrorMessage("Ooops! " + result.Error);
-        }
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        console.log(error);
-        setErrorMessage("Something went wrong while connecting to the API");
-      }
-      setLoadingDetail(false);
-    })();
-
-    return () => controller.abort();
-  }, [selectedId]);
-
-  const hasSearchResults = apiResponseByTitle && data?.Response === "True";
+  const handleReset = () => {
+    setQuery("");
+    setUserInput("");
+    setSearchById(false);
+    setSelectedId(null);
+    setView('results');
+    setPage(1);
+    setHasSearched(false);
+    setFormError(null);
+  }
 
   return (
     <div className="App">
       <div className="header-wrapper">
         <header>
-          <button className="logo-button" onClick={() => window.location.reload()} aria-label="Reload Movie app">
+          <button className="logo-button" onClick={handleReset} aria-label="Back to start">
             <img className='logo' src={logo} alt="Movie app logo" />
           </button>
 
@@ -196,27 +152,31 @@ function App() {
               onSubmit={handleSubmit}
             />
 
-            {recentSearches.length > 0 && (
+            {recentSearches.length > 0 ? (
               <RecentSearches searches={recentSearches} onSelect={searchByTitle} />
+            ) : (
+              <RecentSearches searches={EXAMPLE_SEARCHES} onSelect={searchByTitle} label="Try:" />
             )}
           </>
         )}
 
         {view === 'results' && (
           <>
-            {errorMessage && <ErrorMessage message={errorMessage} />}
+            {resultsError && <ErrorMessage message={resultsError} />}
 
             <div className="results-wrapper">
               {loading && <Loader count={8} />}
-              {hasSearchResults && data.Search.map((movieRes) => (
+              {hasSearchResults && searchData.Search.map((movieRes) => (
                 <MovieCard key={movieRes.imdbID} movie={movieRes} onSelect={handleSelectMovie} />
               ))}
             </div>
 
-            {hasSearchResults && Number(data.totalResults) > 10 && (
+            {!loading && noSearchResults && <NoResults message={'No results for "' + query + '"'} />}
+
+            {hasSearchResults && Number(searchData.totalResults) > 10 && (
               <Pagination
                 page={page}
-                totalResults={Number(data.totalResults)}
+                totalResults={Number(searchData.totalResults)}
                 onPrevious={() => setPage(page - 1)}
                 onNext={() => setPage(page + 1)}
               />
@@ -230,12 +190,14 @@ function App() {
               <button className="back-button" onClick={() => setView('results')}>← Back to results</button>
             )}
 
-            {errorMessage && <ErrorMessage message={errorMessage} />}
+            {detailFetchError && <ErrorMessage message={detailFetchError} />}
 
             <div className="results-wrapper">
               {loadingDetail && <Loader variant="detail" />}
-              {apiResponseById && movie && <MovieDetail movie={movie} />}
+              {movie && <MovieDetail movie={movie} />}
             </div>
+
+            {!loadingDetail && noMovieResult && <NoResults message={'No movie found for id "' + selectedId + '"'} />}
           </>
         )}
       </div>

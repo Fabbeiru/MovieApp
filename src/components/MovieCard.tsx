@@ -1,5 +1,6 @@
 import { KeyboardEvent } from 'react';
 import { SearchResultItem } from '../types';
+import Poster from './Poster';
 
 interface MovieCardProps {
   movie: SearchResultItem;
@@ -23,7 +24,7 @@ function MovieCard({ movie, onSelect }: MovieCardProps) {
       onClick={() => onSelect(movie.imdbID)}
       onKeyDown={handleKeyDown}
     >
-      <img className="poster" src={movie.Poster} alt={movie.Title + " poster"} />
+      <Poster src={movie.Poster} alt={movie.Title + " poster"} />
       <div className="movie-data">
         <h2>{movie.Title}</h2>
         <div className="movie-details">
